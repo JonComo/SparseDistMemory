@@ -19,12 +19,14 @@
 
 @property (nonatomic, strong) NSMutableArray *relationships;
 
+@property float energy;
+
 -(void)setActive:(BOOL)isActive AtTime:(int)time;
 
 -(BOOL)isActiveAtTime:(int)time;
 
--(void)shouldFireIndeces:(NSArray *)indeces atTime:(int)time;
--(NSArray *)indecesFiredAtTime:(int)time;
+-(void)shouldFireNeurons:(NSArray *)neurons atTime:(int)time;
+-(NSArray *)neuronsFiredAtTime:(int)time;
 
 -(void)reset;
 

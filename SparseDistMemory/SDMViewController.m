@@ -20,6 +20,8 @@
     UIImageView *output;
     
     UIButton *stepTime;
+    UIButton *predict;
+    
     UISlider *timeSlider;
     
     SDMNeuron *neuronDrawing;
@@ -45,12 +47,17 @@
     [self.view addSubview:stepTime];
     [stepTime addTarget:self action:@selector(stepTime) forControlEvents:UIControlEventTouchUpInside];
     
+    predict = [UIButton buttonWithType:UIButtonTypeSystem];
+    [predict setTitle:@"Predict (off)" forState:UIControlStateNormal];
+    predict.frame = CGRectMake(320 - 160, self.view.frame.size.width, 160, 44);
+    [self.view addSubview:predict];
+    [predict addTarget:self action:@selector(togglePredict) forControlEvents:UIControlEventTouchUpInside];
+    
     timeSlider = [[UISlider alloc] initWithFrame:CGRectMake(20, 320 + 44, 320-40, 44)];
     [timeSlider addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:timeSlider];
     
     network = [[SDMNetwork alloc] initWithSize:SDMSizeMake(16 * 16, 16)];
-    network.showsPredictions = YES;
     maxTime = 16;
     
     [self render];
@@ -70,6 +77,14 @@
 -(void)stepTime
 {
     [network processState];
+    
+    [self render];
+}
+
+-(void)togglePredict
+{
+    network.showsPredictions = !network.showsPredictions;
+    [predict setTitle:network.showsPredictions ? @"Predict (on)" : @"Predict (off)" forState:UIControlStateNormal];
     
     [self render];
 }

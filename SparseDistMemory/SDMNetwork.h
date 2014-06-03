@@ -42,6 +42,6 @@ SDMSizeMake(int length, int depth)
 
 -(UIImage *)imageFromLevel:(int)level;
 
--(CGPoint)pointForIndex:(int)index;
+-(CGPoint)pointForIndex:(NSUInteger)index;
 
 @end

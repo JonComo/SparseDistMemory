@@ -10,7 +10,7 @@
 
 @implementation NSString (Bits)
 
-+ (NSString *)getBitStringForDouble:(int)value {
++ (NSString *)getBitStringForInt:(int)value {
     
     NSString *bits = @"";
     

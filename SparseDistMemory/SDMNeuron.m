@@ -59,7 +59,7 @@
     [self.active removeAllObjects];
 }
 
--(void)shouldFireIndeces:(NSArray *)indeces atTime:(int)time
+-(void)shouldFireNeurons:(NSArray *)neurons atTime:(int)time
 {
     BOOL foundRelation = NO;
     
@@ -67,23 +67,22 @@
     {
         if ([relation[@"time"] intValue] == time){
             foundRelation = YES;
-            relation[@"indeces"] = indeces;
+            relation[@"neurons"] = neurons;
         }
     }
     
     if (!foundRelation)
     {
-        NSMutableDictionary *relation = [@{@"time": @(time), @"indeces": indeces} mutableCopy];
+        NSMutableDictionary *relation = [@{@"time": @(time), @"neurons": neurons} mutableCopy];
         [self.relationships addObject:relation];
     }
 }
 
--(NSArray *)indecesFiredAtTime:(int)time
+-(NSArray *)neuronsFiredAtTime:(int)time
 {
-    for (NSMutableDictionary *relation in self.relationships)
-    {
+    for (NSMutableDictionary *relation in self.relationships){
         if ([relation[@"time"] intValue] == time){
-            return relation[@"indeces"];
+            return relation[@"neurons"];
         }
     }
     

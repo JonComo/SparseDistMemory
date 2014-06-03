@@ -126,14 +126,14 @@
 				86CF9C881937B99F00E435FC /* Main.storyboard */,
 				86CF9C8B1937B99F00E435FC /* SDMViewController.h */,
 				86CF9C8C1937B99F00E435FC /* SDMViewController.m */,
-				86CF9C8E1937B99F00E435FC /* Images.xcassets */,
-				86CF9C7D1937B99F00E435FC /* Supporting Files */,
 				86CF9CAB1937B9E600E435FC /* SDMNetwork.h */,
 				86CF9CAC1937B9E600E435FC /* SDMNetwork.m */,
 				86CF9CAE1937BA3000E435FC /* SDMNeuron.h */,
 				86CF9CAF1937BA3000E435FC /* SDMNeuron.m */,
 				86CF9CB11937BB4F00E435FC /* NSString+Bits.h */,
 				86CF9CB21937BB4F00E435FC /* NSString+Bits.m */,
+				86CF9C8E1937B99F00E435FC /* Images.xcassets */,
+				86CF9C7D1937B99F00E435FC /* Supporting Files */,
 			);
 			path = SparseDistMemory;
 			sourceTree = "<group>";

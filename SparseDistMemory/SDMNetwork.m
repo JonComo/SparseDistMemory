@@ -36,6 +36,8 @@
             
             [_neurons addObject:layer];
         }
+        
+        
     }
     
     return self;
@@ -56,8 +58,6 @@
 
 -(void)processStream:(NSArray *)stream
 {
-    NSLog(@"Processing: %@", [self stringFromStream:stream]);
-    
     /*
     for (SDMNeuron *neuron in self.neurons[0]){
         neuron.isActive = NO;
@@ -93,18 +93,9 @@
         }
     }
     
-    NSLog(@"Previous: %@ Current: %@", previousNeurons, activeNeurons);
-    
     for (SDMNeuron *prevNeuron in previousNeurons){
         //create link from previous neuron to current, with reference to time as well
-        NSMutableArray *indeces = [NSMutableArray array];
-        
-        for (SDMNeuron *activeNeuron in activeNeurons){
-            int index = [self.neurons[0] indexOfObject:activeNeuron];
-            [indeces addObject:@(index)];
-        }
-        
-        [prevNeuron shouldFireIndeces:indeces atTime:self.time];
+        [prevNeuron shouldFireNeurons:activeNeurons atTime:self.time];
     }
     
     [self clearLevel:0]; //clear base level
@@ -149,37 +140,49 @@
     
     BOOL gray = NO;
     
-    for (int i = 0; i < self.size.length; i++) {
-        
-        SDMNeuron *neuron = self.neurons[level][i];
-        
+    for (SDMNeuron *neuron in self.neurons[level])
+    {
         gray = !gray;
-        if (i % sideLength == 0) gray = !gray;
+        if ([self.neurons[level] indexOfObject:neuron] % sideLength == 0) gray = !gray;
         if (gray) { [[UIColor colorWithWhite:.9 alpha:1] setFill]; }else{ [[UIColor whiteColor] setFill]; }
-        
-        if (neuron.isActive){
-            [[UIColor blackColor] setFill];
-        }
         
         CGContextFillRect(ref, CGRectMake(neuron.x, neuron.y, 1, 1));
     }
     
-    
-    if (self.showsPredictions){
+    if (self.showsPredictions)
+    {
+        //Render predicitons a few steps ahead
+        
         [[UIColor orangeColor] setFill];
         
-        for (SDMNeuron *neuron in self.neurons[level])
+        for (SDMNeuron *neuron in self.neurons[level]){
+            neuron.energy = 0;
+        }
+        
+        for (int pTime = self.time; pTime < self.time + 3; pTime ++)
         {
-            if (neuron.isActive){
-                
-                NSArray *indecesToFire = [neuron indecesFiredAtTime:self.time+1];
-                if (indecesToFire) {
-                    for (NSNumber *index in indecesToFire){
-                        CGPoint point = [self pointForIndex:[index intValue]];
+            for (SDMNeuron *neuron in self.neurons[level])
+            {
+                if (neuron.isActive || neuron.energy > 0.3){
+                    
+                    NSArray *neuronsToFire = [neuron neuronsFiredAtTime:pTime+1];
+                    for (SDMNeuron *neuron in neuronsToFire){
+                        neuron.energy += .1;
+                        CGPoint point = [self pointForIndex:[self.neurons[level] indexOfObject:neuron]];
                         CGContextFillRect(ref, CGRectMake(point.x, point.y, 1, 1));
                     }
                 }
             }
+        }
+        
+        
+    }
+    
+    for (SDMNeuron *neuron in self.neurons[level])
+    {
+        if (neuron.isActive){
+            [[UIColor blackColor] setFill];
+            CGContextFillRect(ref, CGRectMake(neuron.x, neuron.y, 1, 1));
         }
     }
     
@@ -190,7 +193,7 @@
     return image;
 }
 
--(CGPoint)pointForIndex:(int)index
+-(CGPoint)pointForIndex:(NSUInteger)index
 {
     int sideLength = sqrt(self.size.length);
     
