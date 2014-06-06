@@ -60,6 +60,8 @@
     network = [[SDMNetwork alloc] initWithSize:SDMSizeMake(16 * 16, 16)];
     maxTime = 16;
     
+    
+    
     [self render];
 }
 
